@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Reservas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Minhas Reservas</h1>
+
+        {% if reservas %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Item</th>
+                        <th>Data da Reserva</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                        <tr>
+                            <td>{{ reserva[0] }}</td>  <!-- ID da reserva -->
+                            <td>{{ reserva[2] }}</td>  <!-- Nome do item -->
+                            <td>{{ reserva[3] }}</td>  <!-- Data da reserva -->
+                            <td>{{ reserva[4] }}</td>  <!-- Status -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Você ainda não fez nenhuma reserva.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disponibilidade</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Itens Disponíveis para Reserva</h1>
+        
+        {% if disponibilidade %}
+            <ul>
+                {% for item in disponibilidade %}
+                    <li>
+                        <h3>{{ item[1] }} - {{ item[2] }}</h3>
+                        <p>{{ item[3] }}</p>
+                        <form method="POST" action="{{ url_for('reservar', id=item[0]) }}">
+                            <button type="submit">Reservar</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Não há itens disponíveis para reserva no momento.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
