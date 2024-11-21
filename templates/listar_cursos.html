@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cursos</title>
+</head>
+<body>
+    <h1>Lista de Cursos</h1>
+
+    {% if cursos %}
+        <table border="1" cellpadding="10" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nome do Curso</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Instrutor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curso in cursos %}
+                    <tr>
+                        <td>{{ curso[0] }}</td>  <!-- Nome do curso -->
+                        <td>{{ curso[1] }}</td>  <!-- Descrição do curso -->
+                        <td>{{ curso[3] }}</td>  <!-- Categoria -->
+                        <td>{{ curso[4] }}</td>  <!-- Instrutor -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum curso encontrado.</p>
+    {% endif %}
+</body>
+</html>

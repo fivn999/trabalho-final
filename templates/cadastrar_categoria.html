@@ -1,0 +1,10 @@
+<h3>Cadastro de Categoria</h3>
+<form method="POST" action="{{ url_for('cursos_bp.cadastrar_categoria') }}">
+    <label for="nome">Nome da Categoria</label>
+    <input type="text" id="nome" name="nome" required>
+    
+    <label for="descricao">Descrição da Categoria</label>
+    <textarea id="descricao" name="descricao" required></textarea>
+    
+    <button type="submit">Cadastrar Categoria</button>
+</form>
