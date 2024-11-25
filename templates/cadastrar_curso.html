@@ -1,27 +1,36 @@
-<form method="POST">
-    <label for="nome">Nome do Curso</label>
-    <input type="text" id="nome" name="nome" required>
-    
-    <label for="descricao">Descrição do Curso</label>
-    <textarea id="descricao" name="descricao" required></textarea>
-    
-    <label for="categoria_id">Categoria</label>
-    <select id="categoria_id" name="categoria_id">
-        <option value="">Selecione uma Categoria</option>
-        {% for categoria in categorias %}
-            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-        {% endfor %}
-    </select>
-    
-    <h4>Ou, cadastre uma nova categoria:</h4>
-    <label for="nova_categoria_nome">Nome da Nova Categoria</label>
-    <input type="text" id="nova_categoria_nome" name="nova_categoria_nome">
-    
-    <label for="nova_categoria_descricao">Descrição da Nova Categoria</label>
-    <textarea id="nova_categoria_descricao" name="nova_categoria_descricao"></textarea>
-    
-    <label for="id_instrutor">Instrutor</label>
-    <input type="text" id="id_instrutor" name="id_instrutor" required>
-    
-    <button type="submit">Cadastrar Curso</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Curso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Cadastrar Novo Curso</h1>
+
+    <form action="{{ url_for('cursos_bp.cadastrar_curso') }}" method="POST">
+        <!-- Campo para nome do curso -->
+        <label for="nome">Nome do Curso:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+
+        <!-- Campo para descrição do curso -->
+        <label for="descricao">Descrição do Curso:</label>
+        <textarea id="descricao" name="descricao" rows="4" cols="50" required></textarea><br><br>
+
+        <!-- Seleção de categoria -->
+        <label for="categoria_id">Categoria:</label>
+        <select id="categoria_id" name="categoria_id" required>
+            <option value="" disabled selected>Selecione uma categoria</option>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Botão para enviar o formulário -->
+        <button type="submit">Cadastrar Curso</button>
+    </form>
+
+    <p><a href="{{ url_for('sucesso', tipo='cadastrar_curso') }}">Ir para página de sucesso</a></p>
+</body>
+</html>

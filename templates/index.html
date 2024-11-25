@@ -3,28 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disponibilidade</title>
+    <title>Página Inicial</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Itens Disponíveis para Reserva</h1>
-        
-        {% if disponibilidade %}
+    <!-- Verifica se há mensagens de flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
             <ul>
-                {% for item in disponibilidade %}
-                    <li>
-                        <h3>{{ item[1] }} - {{ item[2] }}</h3>
-                        <p>{{ item[3] }}</p>
-                        <form method="POST" action="{{ url_for('reservar', id=item[0]) }}">
-                            <button type="submit">Reservar</button>
-                        </form>
-                    </li>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>Não há itens disponíveis para reserva no momento.</p>
         {% endif %}
-    </div>
+    {% endwith %}
+
+    <h1>Página Inicial</h1>
+
+    <!-- Verifica se o usuário está logado -->
+    {% if 'user_id' in session %}
+        <p>Bem-vindo, {{ session['user_name'] }}!</p>  <!-- Exibe o nome do usuário (presumindo que você armazena no session) -->
+        <h2>Itens Disponíveis</h2>
+
+        <!-- Exibe a lista de itens disponíveis -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in disponibilidade %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.nome }}</td>
+                        <td>{{ item.descricao }}</td>
+                        <td>{{ 'Disponível' if item.disponivel else 'Indisponível' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Você precisa estar logado para visualizar a lista de itens.</p>
+    {% endif %}
+
+    <p><a href="{{ url_for('login_bp.login') }}">Login</a> | <a href="{{ url_for('logout') }}">Logout</a></p>
 </body>
 </html>

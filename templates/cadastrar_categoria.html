@@ -1,10 +1,28 @@
-<h3>Cadastro de Categoria</h3>
-<form method="POST" action="{{ url_for('cursos_bp.cadastrar_categoria') }}">
-    <label for="nome">Nome da Categoria</label>
-    <input type="text" id="nome" name="nome" required>
-    
-    <label for="descricao">Descrição da Categoria</label>
-    <textarea id="descricao" name="descricao" required></textarea>
-    
-    <button type="submit">Cadastrar Categoria</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Categoria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Cadastrar Nova Categoria</h1>
+
+    <!-- Formulário de cadastro de categoria -->
+    <form action="{{ url_for('cursos_bp.cadastrar_categoria') }}" method="POST">
+        <!-- Campo para nome da categoria -->
+        <label for="nome">Nome da Categoria:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+
+        <!-- Campo para descrição da categoria -->
+        <label for="descricao">Descrição da Categoria:</label>
+        <textarea id="descricao" name="descricao" rows="4" cols="50" required></textarea><br><br>
+
+        <!-- Botão para enviar o formulário -->
+        <button type="submit">Cadastrar Categoria</button>
+    </form>
+
+    <p><a href="{{ url_for('sucesso', tipo='cadastrar_categoria') }}">Ir para página de sucesso</a></p>
+</body>
+</html>

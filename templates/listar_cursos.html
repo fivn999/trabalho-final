@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Cursos</title>
+    <title>Listar Cursos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Lista de Cursos</h1>
 
+    <!-- Verifica se há cursos -->
     {% if cursos %}
-        <table border="1" cellpadding="10" cellspacing="0">
+        <table border="1">
             <thead>
                 <tr>
                     <th>Nome do Curso</th>
                     <th>Descrição</th>
                     <th>Categoria</th>
-                    <th>Instrutor</th>
                 </tr>
             </thead>
             <tbody>
                 {% for curso in cursos %}
                     <tr>
-                        <td>{{ curso[0] }}</td>  <!-- Nome do curso -->
-                        <td>{{ curso[1] }}</td>  <!-- Descrição do curso -->
-                        <td>{{ curso[3] }}</td>  <!-- Categoria -->
-                        <td>{{ curso[4] }}</td>  <!-- Instrutor -->
+                        <td>{{ curso.nome }}</td>
+                        <td>{{ curso.descricao }}</td>
+                        <td>{{ curso.categoria }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>Nenhum curso encontrado.</p>
+        <p>Não há cursos disponíveis no momento.</p>
     {% endif %}
+
+    <p><a href="{{ url_for('cursos_bp.cadastrar_curso') }}">Cadastrar Novo Curso</a></p>
+    <p><a href="{{ url_for('index') }}">Voltar para a Página Inicial</a></p>
 </body>
 </html>

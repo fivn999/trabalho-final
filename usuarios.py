@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, Flask, render_template, request, redirect, jsonify, url_for, flash, session
 import utils
 
 usuarios_bp = Blueprint ('usuarios_bp', __name__)
@@ -14,13 +14,26 @@ def matriculas():
     
     # Inserir dados na tabela de matrículas
     sql = "INSERT INTO matriculas (id_usuario, id_curso) VALUES (?, ?)"
-    cursor.execute(sql, (id_usuario, id_curso))
-    connection.commit()
-    
-    cursor.close()
-    connection.close()
-    
-    return redirect(url_for('sucesso'))
+    try:
+        cursor.execute(sql, (id_usuario, id_curso))
+        connection.commit()
+        response = {
+            'status': 'success',
+            'message': 'Matrícula realizada com sucesso!'
+        }
+        return jsonify(response), 201
+
+    except Exception as e:
+        connection.rollback()
+        response = {
+            'status': 'error',
+            'message': f'Ocorreu um erro ao realizar a matrícula: {str(e)}'
+        }
+        return jsonify(response), 500
+
+    finally:
+        cursor.close()
+        connection.close()
 
 # Rota para registrar a conclusão do curso
 @usuarios_bp.route('/conclusao_curso', methods=['POST'])
@@ -33,13 +46,26 @@ def conclusao_curso():
     
     # Inserir dados na tabela de conclusão de curso
     sql = "INSERT INTO conclusao_curso (id_usuario, id_curso) VALUES (?, ?)"
-    cursor.execute(sql, (id_usuario, id_curso))
-    connection.commit()
-    
-    cursor.close()
-    connection.close()
-    
-    return redirect(url_for('sucesso'))
+    try:
+        cursor.execute(sql, (id_usuario, id_curso))
+        connection.commit()
+        response = {
+            'status': 'success',
+            'message': 'Curso concluído com sucesso!'
+        }
+        return jsonify(response), 201
+
+    except Exception as e:
+        connection.rollback()
+        response = {
+            'status': 'error',
+            'message': f'Ocorreu um erro ao registrar a conclusão do curso: {str(e)}'
+        }
+        return jsonify(response), 500
+
+    finally:
+        cursor.close()
+        connection.close()
 
 
 # Rota pra listar todos usuarios

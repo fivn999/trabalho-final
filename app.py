@@ -20,7 +20,7 @@ app.register_blueprint(login_bp)
 def index():
     if 'user_id' not in session:
         flash('Você precisa estar logado para acessar esta página.', 'warning')
-        return redirect(url_for('login_bp.login'))  # Redireciona para a página de login se não estiver autenticado
+        return render_template('login.html')  # Redireciona para a página de login se não estiver autenticado
 
     # Se o usuário estiver autenticado, exibe a página inicial
     connection = utils.get_db_connection()

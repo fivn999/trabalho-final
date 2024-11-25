@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, Flask, render_template, request, jsonify
 import utils
 
 cursos_bp = Blueprint ('cursos_bp', __name__)
@@ -14,7 +14,7 @@ def exibir_formulario():
     cursor.close()
     connection.close()
     
-    return render_template('cadastrar_curso.html', categorias=categorias)  # Passa as categorias para o template
+    return render_template('cadastrar_curso.html', categorias=categorias)
 
 # Rota para cadastrar cursos
 @cursos_bp.route('/cursos', methods=['POST'])
@@ -22,25 +22,36 @@ def cadastrar_curso():
     nome = request.form['nome']
     descricao = request.form['descricao']
     categoria_id = request.form['categoria_id']
-    id_instrutor = request.form['id_instrutor']
     
     connection = utils.get_db_connection()
     cursor = connection.cursor()
     
-    # Inserir dados na tabela de cursos
-    sql = "INSERT INTO cursos (nome, descricao, categoria_id, id_instrutor) VALUES (?, ?, ?, ?)"
-    cursor.execute(sql, (nome, descricao, categoria_id, id_instrutor))
-    connection.commit()
+    sql = "INSERT INTO cursos (nome, descricao, categoria_id) VALUES (?, ?, ?)"
     
-    cursor.close()
-    connection.close()
-    
-    return redirect(url_for('sucesso', tipo = 'cadastrar_curso'))
+    try:
+        cursor.execute(sql, (nome, descricao, categoria_id))
+        connection.commit()
+        response = {
+            'status': 'success',
+            'message': 'Curso cadastrado com sucesso!'
+        }
+        return jsonify(response), 201
 
+    except Exception as e:
+        connection.rollback()
+        response = {
+            'status': 'error',
+            'message': f'Ocorreu um erro ao cadastrar o curso: {str(e)}'
+        }
+        return jsonify(response), 500
+
+    finally:
+        cursor.close()
+        connection.close()
 
 @cursos_bp.route('/categorias', methods=['GET'])
 def exibir_formulario_categoria():
-    return render_template('cadastrar_categoria.html')  # Renderiza a página de cadastro de categoria
+    return render_template('cadastrar_categoria.html')
 
 
 # Rota para cadastro de categorias de cursos
@@ -53,13 +64,27 @@ def cadastrar_categoria():
     cursor = connection.cursor()
     
     sql = "INSERT INTO categorias (nome, descricao) VALUES (?, ?)"
-    cursor.execute(sql, (nome, descricao))
-    connection.commit()
     
-    cursor.close()
-    connection.close()
-    
-    return redirect(url_for('sucesso', tipo='cadastrar_categoria'))
+    try:
+        cursor.execute(sql, (nome, descricao))
+        connection.commit()
+        response = {
+            'status': 'success',
+            'message': 'Categoria cadastrada com sucesso!'
+        }
+        return jsonify(response), 201
+
+    except Exception as e:
+        connection.rollback()
+        response = {
+            'status': 'error',
+            'message': f'Ocorreu um erro ao cadastrar a categoria: {str(e)}'
+        }
+        return jsonify(response), 500
+
+    finally:
+        cursor.close()
+        connection.close()
 
 
 # Rota pra listar todos os cursos
@@ -69,10 +94,9 @@ def listar_cursos():
     cursor = connection.cursor()
 
     # Consultar todos os cursos na tabela
-    sql = "SELECT c.nome, c.descricao, cat.nome AS categoria, i.nome AS instrutor " \
+    sql = "SELECT c.nome, c.descricao, cat.nome AS categoria" \
           "FROM cursos c " \
-          "JOIN categorias cat ON c.categoria_id = cat.id " \
-          "JOIN instrutores i ON c.id_instrutor = i.id"
+          "JOIN categorias cat ON c.categoria_id = cat.id " 
     cursor.execute(sql)
     cursos = cursor.fetchall()
 

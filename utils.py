@@ -5,6 +5,7 @@ db_host = 'localhost'
 db_user = 'root'
 db_password = ''
 db_name = 'canes'
+charset='utf8mb4'
 
 def get_db_connection():
     try:
